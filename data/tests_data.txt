@@ -1,0 +1,21 @@
+Full information
+
+Create a square with side length 100 mm centered at the origin. Place a circle with a radius of 20 mm at the center of the square.
+Draw a circle with a radius of 50 mm centered at (0, 0). Inside it, add a concentric circle with a radius of 25 mm.
+Create a rectangle 150 mm wide and 80 mm tall with its bottom-left corner at (0, 0). Add a circle with a diameter of 30 mm at the center of the rectangle.
+Draw a regular hexagon with a circumradius of 60 mm centered at the origin. Place a circle with radius 30 mm at its center.
+
+Partial information
+
+Create a square plate centered at the origin with a central hole for an M10 bolt.
+Missing: plate size, hole diameter for M10 clearance (e.g. from a bolt standard table).
+Make a standard mounting plate, type "MP-200", with four corner holes.
+Missing: plate dimensions, hole diameter, hole offset from corners (from an internal product spec).
+Draw a circular flange with 6 bolt holes evenly spaced on the bolt circle, outer diameter 160 mm.
+Missing: bolt circle diameter, hole diameter.
+Create a rectangle 200 mm wide centered at the origin, with two holes along the horizontal centerline using our default hole spacing.
+Missing: rectangle height, hole diameter, "default hole spacing" (from company design rules).
+Draw an equilateral triangle, centered at the origin with one vertex pointing up, and place a circle at its centroid with the standard clearance hole for M6.
+Missing: triangle side length, M6 clearance hole diameter.
+Create a rectangular bracket for part "BR-45" with three holes in a row; the middle hole is larger than the outer two.
+Missing: all dimensions, hole sizes, spacing (from a part catalog).
