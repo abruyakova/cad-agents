@@ -3,6 +3,7 @@ from langchain_core.callbacks import get_usage_metadata_callback
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 from ollama import chat
+import time
 from pathlib import Path
 from langchain_chroma import Chroma
 from langchain.agents import create_agent
@@ -11,10 +12,14 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+from metrics import record_metrics, start_metrics_server
 from prompts import build_system_prompt
 
 DATA_DIR = Path(__file__).parent / "data"
 
+# qwen3-embedding
+EMBEDDING_MODEL = "qwen3-embedding"
+MODEL = 'qwen3:4b-instruct'
 
 def load_data(path=DATA_DIR):
     documents = [
@@ -29,7 +34,7 @@ def load_data(path=DATA_DIR):
     )
     all_splits = text_splitter.split_documents(documents)
     print(f"Split blog post into {len(all_splits)} sub-documents.")
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     vector_store = Chroma(
         collection_name="example_collection",
         embedding_function=embeddings,
@@ -38,7 +43,7 @@ def load_data(path=DATA_DIR):
     vector_store.add_documents(all_splits)
 
 def main():
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
     vector_store = Chroma(
         collection_name="example_collection",
         embedding_function=embeddings,
@@ -59,10 +64,11 @@ def main():
 
 def agentDialog(prompt_with_context):
     agent = create_agent(
-        model=ChatOllama(model='qwen3:4b-instruct'),
+        model=ChatOllama(model=MODEL),
         middleware=[prompt_with_context]
     )
 
+    start_metrics_server(model=MODEL)
     print("Enter a drawing instruction (empty line or 'exit' to quit).")
     messages = []
     while True:
@@ -76,7 +82,9 @@ def agentDialog(prompt_with_context):
         messages.append({"role": "user", "content": user_content})
 
         with get_usage_metadata_callback() as cb:
+            started = time.perf_counter()
             result = agent.invoke({"messages": messages})
+            seconds = time.perf_counter() - started
 
             for model_name, usage in cb.usage_metadata.items():
                 print(f"Model: {model_name}")
@@ -88,12 +96,17 @@ def agentDialog(prompt_with_context):
         final_message = messages[-1]
         print(final_message.content)
 
+        is_question = final_message.text.lstrip().startswith("QUESTION:")
+        record_metrics(final_message, cb.usage_metadata, seconds,
+                       "question" if is_question else "json")
+
         # Keep the conversation while the agent is asking questions;
         # start a new one once it returns the final JSON.
-        if not final_message.text.lstrip().startswith("QUESTION:"):
+        if not is_question:
             messages = []
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+   #load_data()
     main()

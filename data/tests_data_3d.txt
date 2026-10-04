@@ -1,0 +1,35 @@
+Full information
+
+I need a simple box, 100 length, 60 width and 40 height, in mm, centered on the origin.
+Make me a 50 mm cube sitting on the origin and drill a 20 mm hole straight through it along Z, right in the middle.
+Can you model a cylinder, 80 mm across and 120 mm tall? Put the bottom at the origin and let it go up in Z.
+I need a piece of tube: 60 mm OD, 50 mm ID, 200 mm long, starting at the origin and running along Z.
+Just a ball, please: 40 mm radius, centered at zero.
+Give me a pointy cone, 100 mm across at the bottom and 150 mm tall, base on the origin, tip pointing up in Z.
+Make a 120 by 120 plate, 10 mm thick, centered. Put a 9 mm hole in each corner, 15 mm in from both edges.
+Take a hexagon, 30 mm from center to corner, extrude it 25 mm up in Z and punch a 16 mm hole through the middle. Keep it centered on the origin.
+I need a block 150 x 80 x 30 mm with one corner at 0,0,0. On the top face cut a 100 x 40 pocket, 10 mm deep, right in the middle of the face.
+Make a round disc, 160 mm diameter and 12 mm thick, centered. It needs six 11 mm holes on a 120 mm bolt circle, evenly spaced, first one on the X axis.
+
+Partial information
+
+Can I get a square plate, 10 mm thick, with a hole in the middle for an M10 bolt?
+Missing: plate size, M10 clearance hole diameter (from the bolt clearance table).
+I need the MP-200 plate as a solid, 8 mm thick.
+Missing: plate size, fillet radius, hole diameter and positions (from the part catalog).
+Can you make the MP-150 in 3D?
+Missing: plate thickness (not in the catalog), plate size, hole diameter and positions (from the part catalog).
+Make a round flange, 15 mm thick, with six bolt holes around it.
+Missing: outer diameter, bolt circle diameter, hole diameter (from company design rules).
+I need a 200 mm flange with 8 holes for M12 bolts on the usual bolt circle.
+Missing: flange thickness, bolt circle diameter (from company design rules), M12 clearance hole diameter (from the bolt clearance table).
+Make a plate 200 wide and 5 thick, centered, with two holes along the middle at our normal spacing.
+Missing: plate height, hole diameter, "default hole spacing" (from company design rules).
+I need a triangle plate, 8 mm thick, point up, with an M6 hole right in the center.
+Missing: triangle side length, M6 clearance hole diameter.
+Make a 50 mm tall cylinder with a hole through it for an M16 bolt.
+Missing: cylinder diameter, position, M16 clearance hole diameter (from the bolt clearance table).
+Square plate, 12 mm thick, with the usual bolt holes in the corners.
+Missing: plate size, default fastener and hole diameter, corner hole offset (from company design rules).
+I need a spacer for an M20 bolt, 40 mm outside.
+Missing: ring thickness, position, M20 clearance hole diameter (from the bolt clearance table).

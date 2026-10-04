@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Generated vector store (rebuilt from data/*.md)
+chroma_langchain_db/
+
+# Benchmark output
+benchmark/results/
+
+# OS / IDE
+.DS_Store
+.idea/workspace.xml

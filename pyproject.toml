@@ -9,4 +9,14 @@ dependencies = [
     "langchain-ollama",
     "langchain-text-splitters",
     "ollama>=0.6.2",
+    "prometheus-client",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
