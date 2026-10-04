@@ -22,6 +22,14 @@ CHROMA_DIR = Path(__file__).parent / "chroma_langchain_db"
 EMBEDDING_MODEL = "qwen3-embedding"
 MODEL = 'qwen3:4b-instruct'
 
+# Limits so one run cannot take over the machine.
+CHAT_OPTIONS = {
+    "temperature": 0,
+    "num_ctx": 8192,
+    "num_predict": 1024,
+    "keep_alive": "1m",
+}
+
 
 def build_vector_store():
     embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
@@ -63,7 +71,7 @@ def build_agent(on_retrieval=None):
         docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)
         return build_system_prompt(docs_content)
 
-    return create_agent(model=ChatOllama(model=MODEL),
+    return create_agent(model=ChatOllama(model=MODEL, **CHAT_OPTIONS),
                         middleware=[prompt_with_context])
 
 

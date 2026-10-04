@@ -31,14 +31,6 @@ CASE_SETS = {"2d": cases_2d.CASES, "3d": cases_3d.CASES}
 ACCEPT_DEFAULTS = "all default"
 MAX_TURNS = 4
 
-# Limits so one run cannot take over the machine.
-CHAT_OPTIONS = {
-    "temperature": 0,
-    "num_ctx": 8192,
-    "num_predict": 1024,
-    "keep_alive": "1m",
-}
-
 FIELDS = [
     "run_id", "case_set", "case_no", "section", "case", "repeat", "turns", "status", "mismatches",
     "total_s", "retrieval_s", "load_s", "prompt_eval_s", "eval_s",
