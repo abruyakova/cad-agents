@@ -6,11 +6,18 @@ The agent itself is measured by the benchmark, not by pytest:
 """
 import copy
 
-from benchmark.cases import CASES, compare, read_instructions
+from benchmark.cases_2d import CASES, compare
+from benchmark.cases_3d import CASES as CASES_3D
 
 
-def test_every_instruction_has_expected_result():
-    assert set(read_instructions()) == set(CASES)
+def test_cases_are_well_formed():
+    for cases in (CASES, CASES_3D):
+        instructions = [case["instruction"] for case in cases]
+        assert len(instructions) == len(set(instructions)), "duplicate instruction"
+        for case in cases:
+            assert case["section"] in ("Full information", "Partial information")
+    for case in CASES:
+        assert set(case["expected"]) == {"outline", "holes"}
 
 
 def expected_as_result(expected):
@@ -20,14 +27,14 @@ def expected_as_result(expected):
 
 
 def test_compare_accepts_expected_geometry():
-    for expected in CASES.values():
+    for expected in (case["expected"] for case in CASES):
         result = expected_as_result(expected)
         result["holes"].reverse()  # hole order does not matter
         assert compare(result, expected) == []
 
 
 def test_compare_reports_differences():
-    expected = next(iter(CASES.values()))
+    expected = CASES[0]["expected"]
     result = expected_as_result(expected)
     result["outline"]["side"] += 5
     result["holes"][0]["diameter"] += 1
@@ -37,5 +44,5 @@ def test_compare_reports_differences():
 
 
 def test_compare_reports_incomplete_status():
-    expected = next(iter(CASES.values()))
+    expected = CASES[0]["expected"]
     assert compare({"status": "incomplete", "missing": ["side"]}, expected)

@@ -16,10 +16,20 @@ from metrics import record_metrics, start_metrics_server
 from prompts import build_system_prompt
 
 DATA_DIR = Path(__file__).parent / "data"
+CHROMA_DIR = Path(__file__).parent / "chroma_langchain_db"
 
 # qwen3-embedding
 EMBEDDING_MODEL = "qwen3-embedding"
 MODEL = 'qwen3:4b-instruct'
+
+
+def build_vector_store():
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
+    return Chroma(
+        collection_name="example_collection",
+        embedding_function=embeddings,
+        persist_directory= CHROMA_DIR,
+    )
 
 def load_data(path=DATA_DIR):
     documents = [
@@ -34,39 +44,30 @@ def load_data(path=DATA_DIR):
     )
     all_splits = text_splitter.split_documents(documents)
     print(f"Split blog post into {len(all_splits)} sub-documents.")
-    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
-    vector_store = Chroma(
-        collection_name="example_collection",
-        embedding_function=embeddings,
-        persist_directory="./chroma_langchain_db",
-    )
+
+    vector_store = build_vector_store();
     vector_store.add_documents(all_splits)
 
-def main():
-    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
-    vector_store = Chroma(
-        collection_name="example_collection",
-        embedding_function=embeddings,
-        persist_directory="./chroma_langchain_db",
-    )
+def build_agent(on_retrieval=None):
+    vector_store = build_vector_store()
 
     @dynamic_prompt
     def prompt_with_context(request):
         user_text = "\n".join(
             m.text for m in request.state["messages"] if m.type == "human"
         )
+        started = time.perf_counter()
         retrieved_docs = vector_store.similarity_search(user_text)
+        if on_retrieval:
+            on_retrieval(time.perf_counter() - started)
         docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)
         return build_system_prompt(docs_content)
 
-    agentDialog(prompt_with_context)
+    return create_agent(model=ChatOllama(model=MODEL),
+                        middleware=[prompt_with_context])
 
 
-def agentDialog(prompt_with_context):
-    agent = create_agent(
-        model=ChatOllama(model=MODEL),
-        middleware=[prompt_with_context]
-    )
+def agentDialog(agent):
 
     start_metrics_server(model=MODEL)
     print("Enter a drawing instruction (empty line or 'exit' to quit).")
@@ -109,4 +110,4 @@ def agentDialog(prompt_with_context):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
    #load_data()
-    main()
+    agentDialog(build_agent())
