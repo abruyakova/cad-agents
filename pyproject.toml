@@ -10,6 +10,7 @@ dependencies = [
     "langchain-text-splitters",
     "ollama>=0.6.2",
     "prometheus-client",
+    "deepagents>=0.7.22",
 ]
 
 [dependency-groups]
